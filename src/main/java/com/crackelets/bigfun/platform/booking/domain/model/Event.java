@@ -40,7 +40,7 @@ public class Event extends AuditModel {
     private String image;
 
     @NotNull
-    private Date date;
+    private String date;
 
     @NotNull
     private int cost;

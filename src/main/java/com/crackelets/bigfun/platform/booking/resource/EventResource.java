@@ -19,7 +19,7 @@ public class EventResource {
     private String address;
     private int capacity;
     private String image;
-    private Date date;
+    private String date;
     private int cost;
     private String district;
     private Set<EventAttendee> attendeesListByEvent;

@@ -21,3 +21,13 @@ public class ProfileContextFacadeImpl implements ProfileContextFacade {
         return organizerService.getAll();
     }
 }
+
+
+
+
+
+
+
+
+
+

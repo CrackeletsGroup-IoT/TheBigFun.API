@@ -33,7 +33,7 @@ public class CreateEventResource {
     private String image;
 
     @NotNull
-    private Date date;
+    private String date;
 
 
     @NotNull
