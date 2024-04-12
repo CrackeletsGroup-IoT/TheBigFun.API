@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,8 +37,11 @@ public class Event extends AuditModel {
     @NotNull
     private int capacity;
 
-    @Size(max = 500)
-    private String image;
+    //@ElementCollection
+    //@CollectionTable(name = "event_images", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "image_url")
+    private String imageUrl;
+
 
     @NotNull
     private String date;

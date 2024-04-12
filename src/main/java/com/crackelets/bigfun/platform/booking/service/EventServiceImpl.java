@@ -80,7 +80,7 @@ public class EventServiceImpl implements EventService {
                         .withDate(event.getDate())
                         .withAddress(event.getAddress())
                         .withCost(event.getCost())
-                        .withImage(event.getImage())
+                        .withImageUrl(event.getImageUrl())
                         .withCapacity(event.getCapacity())))
                 .orElseThrow(() -> new ResourceNotFoundException(ENTITY, eventId));
 

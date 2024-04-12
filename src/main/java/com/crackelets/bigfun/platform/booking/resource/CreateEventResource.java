@@ -28,10 +28,6 @@ public class CreateEventResource {
 
     @NotNull
     private int capacity;
-
-    @Size(max = 500)
-    private String image;
-
     @NotNull
     private String date;
 
