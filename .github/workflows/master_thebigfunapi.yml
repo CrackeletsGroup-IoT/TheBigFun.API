@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'TheBigFunApi'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3F120FB2C1F44464A6C1C27538043A4A }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B481414934BC46058C1D6A420905E0E5 }}
           package: '*.jar'
