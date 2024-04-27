@@ -13,11 +13,13 @@ import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 
 import java.util.Map;
+
+@TestConfiguration
 
 @CucumberContextConfiguration
 public class AttendeeStepDefinitions {
@@ -26,7 +28,6 @@ public class AttendeeStepDefinitions {
     private AttendeeRepository attendeeRepository;
     private final TestRestTemplate testRestTemplate = new TestRestTemplate();
 
-    @LocalServerPort
     private int randomServerPort;
     private String endpointPath;
     private ResponseEntity<String> responseEntity;

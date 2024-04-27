@@ -16,12 +16,14 @@ import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 
 import java.util.Date;
 import java.util.Map;
+
+@TestConfiguration
 
 @CucumberContextConfiguration
 public class EventStepDefinitions {
@@ -30,7 +32,6 @@ public class EventStepDefinitions {
     private EventRepository eventRepository;
     private final TestRestTemplate testRestTemplate = new TestRestTemplate();
 
-    @LocalServerPort
     private int randomServerPort;
     private String endpointPath;
     private ResponseEntity<String> responseEntity;
@@ -48,7 +49,7 @@ public class EventStepDefinitions {
                 .withAddress(address)
                 .withCapacity(capacity)
                 .withImage(image)
-                .withDate(date)
+                .withDate(String.valueOf(date))
                 .withCost(cost)
                 .withDistrict(district);
         HttpHeaders headers = new HttpHeaders();
@@ -97,7 +98,7 @@ public class EventStepDefinitions {
             event.setAddress(address);
             event.setCapacity(capacity);
             event.setImage(image);
-            event.setDate(date);
+            event.setDate(String.valueOf(date));
             event.setCost(cost);
             event.setDistrict(district);
             eventRepository.save(event);
