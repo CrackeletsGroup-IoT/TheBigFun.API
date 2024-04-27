@@ -12,13 +12,17 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.Assert;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import java.util.Map;
 
+@TestConfiguration
 @CucumberContextConfiguration
 public class OrganizerStepDefinitions {
 
@@ -26,7 +30,6 @@ public class OrganizerStepDefinitions {
     private OrganizerRepository organizerRepository;
     private final TestRestTemplate testRestTemplate = new TestRestTemplate();
 
-    @LocalServerPort
     private int randomServerPort;
     private String endpointPath;
     private ResponseEntity<String> responseEntity;
