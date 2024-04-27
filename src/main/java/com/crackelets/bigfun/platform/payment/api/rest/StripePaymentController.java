@@ -3,7 +3,9 @@ package com.crackelets.bigfun.platform.payment.api.rest;
 import com.crackelets.bigfun.platform.payment.domain.model.StripeChargeDto;
 import com.crackelets.bigfun.platform.payment.domain.model.StripeTokenDto;
 import com.crackelets.bigfun.platform.payment.domain.service.StripePaymentService;
+import com.crackelets.bigfun.platform.payment.mapping.StripeChargeMapper;
 import com.crackelets.bigfun.platform.payment.mapping.StripePaymentMapper;
+import com.crackelets.bigfun.platform.payment.resource.CreateStripeChargeResource;
 import com.crackelets.bigfun.platform.payment.resource.CreateStripeTokenResource;
 import com.stripe.Stripe;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,10 +19,12 @@ public class StripePaymentController {
 
     private final StripePaymentService stripePaymentService;
     private final StripePaymentMapper mapper;
+    private final StripeChargeMapper chargeMapper;
 
-    public StripePaymentController(StripePaymentService stripePaymentService, StripePaymentMapper mapper) {
+    public StripePaymentController(StripePaymentService stripePaymentService, StripePaymentMapper mapper, StripeChargeMapper chargeMapper) {
         this.stripePaymentService = stripePaymentService;
         this.mapper = mapper;
+        this.chargeMapper = chargeMapper;
     }
 
     @PostMapping("/card/token")
@@ -32,8 +36,8 @@ public class StripePaymentController {
     }
 
     @PostMapping("/charge")
-    public StripeChargeDto charge(@RequestBody StripeChargeDto model) {
+    public StripeChargeDto charge(@RequestBody CreateStripeChargeResource model) {
 
-        return stripePaymentService.charge(model);
+        return stripePaymentService.charge(chargeMapper.toModel(model));
     }
 }

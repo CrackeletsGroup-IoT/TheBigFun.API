@@ -19,7 +19,7 @@ import java.util.*;
 public class StripePaymentServiceImpl implements StripePaymentService {
 
     private final String apiKey = "pk_test_51PA1ZlKKAQPi64qcn8nkMW2hLADxxlMcPrJhoadgr2fdHVttbOftQYrcCmT7TU5dnd1Y8BAYyyku1lufBjJY5JhO00aNumyrP9";
-
+    private final String secretApiKey = "sk_test_51PA1ZlKKAQPi64qcYCemnQudTCpMHUOuFhAjted6X7dvBBm5Y2kQfNcE6VSGftfGA94cDLKI2UYFv3tHwJCoDYU900KmmbBUtH";
     @Override
     @PostConstruct
     public void init() {
@@ -28,6 +28,7 @@ public class StripePaymentServiceImpl implements StripePaymentService {
 
     @Override
     public StripeTokenDto createCardToken(StripeTokenDto model) {
+        Stripe.apiKey = apiKey;
         try {
             Map<String, Object> card = new HashMap<>();
             card.put("number", model.getCardNumber());
@@ -49,15 +50,13 @@ public class StripePaymentServiceImpl implements StripePaymentService {
             return model;
         } catch (StripeException e) {
             log.error("Error al crear el token de la tarjeta con Stripe", e);
-            // Manejar la excepción de StripeException de manera adecuada,
-            // por ejemplo, puedes devolver un objeto StripeTokenDto con éxito falso
-            // o lanzar una excepción personalizada que proporcione más información.
             throw new RuntimeException("Error al crear el token de la tarjeta con Stripe: " + e.getMessage(), e);
         }
     }
 
     @Override
     public StripeChargeDto charge(StripeChargeDto chargeRequest) {
+        Stripe.apiKey = secretApiKey;
         try {
             chargeRequest.setSuccess(false);
             Map<String, Object> chargeParams = new HashMap<>();

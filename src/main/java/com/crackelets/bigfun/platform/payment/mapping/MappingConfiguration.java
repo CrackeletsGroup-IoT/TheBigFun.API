@@ -15,4 +15,9 @@ public class MappingConfiguration {
     public StripePaymentMapper stripePaymentMapper() {
         return new StripePaymentMapper();
     }
+
+    @Bean
+    public StripeChargeMapper stripeChargeMapper() {
+        return new StripeChargeMapper();
+    }
 }
