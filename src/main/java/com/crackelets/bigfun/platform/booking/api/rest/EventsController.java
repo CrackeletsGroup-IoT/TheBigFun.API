@@ -8,8 +8,10 @@ import com.crackelets.bigfun.platform.booking.resource.CreateEventResource;
 import com.crackelets.bigfun.platform.booking.resource.EventResource;
 import com.crackelets.bigfun.platform.booking.resource.UpdateEventResource;
 import com.crackelets.bigfun.platform.shared.services.media.StorageService;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +70,7 @@ public class EventsController {
     @DeleteMapping("{eventId}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long eventId){ return eventService.delete(eventId);}
 
-    @PostMapping("/post/{postId}/upload")
+    @PostMapping("{postId}/upload")
     public ResponseEntity<Event> uploadFiles(
             @PathVariable Long postId,
             @RequestParam("file") MultipartFile file) {
@@ -100,6 +104,17 @@ public class EventsController {
         return ResponseEntity.ok(postWithImages);
     }
 
+
+    @GetMapping("{filename:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
+        Resource file = storageService.loadAsResource(filename);
+        String contentType = Files.probeContentType(file.getFile().toPath());
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_TYPE, contentType)
+                .body(file);
+    }
 
 
 
