@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests().antMatchers(
                         "/api/v1/userss/auth/*",
                         "/api/v1/**",
- /*                       "/api/v1/userss",
+                        "/api/v1/userss",
                         "/api/v1/attendees",
                         "/api/v1/attendees/*",
                         "/api/v1/events",
@@ -62,7 +62,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/v1/organizers",
                         "/api/v1/organizers/*",
                         "/api/v1/organizersto",
-                        "/api/v1/organizersto/**",*/
+                        "/api/v1/organizersto/**",
+                        "/api/v1/stripe-payment/**",
+
                         "/swagger-ui/**",
                         "/api-docs/**").permitAll()
                 .anyRequest().authenticated();
