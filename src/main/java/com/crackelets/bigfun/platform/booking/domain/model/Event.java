@@ -55,7 +55,7 @@ public class Event extends AuditModel {
 /*    @NotNull
     private Long organizerId;*/
 
-
+    private Boolean attendingEvent = false;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
     private Set<EventAttendee> attendeesListByEvent;
