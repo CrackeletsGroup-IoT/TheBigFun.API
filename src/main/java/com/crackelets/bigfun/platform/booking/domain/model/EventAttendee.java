@@ -25,7 +25,7 @@ public class EventAttendee {
     private Event event;
     private Long attendeeId;
 
-    @OneToOne(mappedBy = "event_attendee", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "eventAttendee", cascade = CascadeType.ALL)
     private IoTDevice ioTDevice =null;
 
     public EventAttendee(Event event, Long attendeeId) {
