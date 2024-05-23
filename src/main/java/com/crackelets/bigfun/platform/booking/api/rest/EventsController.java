@@ -71,39 +71,26 @@ public class EventsController {
     public ResponseEntity<?> deleteEvent(@PathVariable Long eventId){ return eventService.delete(eventId);}
 
     @PostMapping("{postId}/upload")
-    public ResponseEntity<Event> uploadFiles(
-            @PathVariable Long postId,
-            @RequestParam("file") MultipartFile file) {
-
+    public ResponseEntity<Event> uploadFiles(@PathVariable Long postId, @RequestParam("file") MultipartFile file) {
 
         Event post = eventService.getById(postId);
 
         if (post == null)
             return ResponseEntity.notFound().build();
 
-        //List<String> fileUrls = new ArrayList<>();
-
-        //int filesToProcess = Math.min(files.size(), 3);
-
-        //for (int i = 0; i < filesToProcess; i++) {
-            //MultipartFile file = files.get(i);
             String path = storageService.storage(file);
             String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
             String url = ServletUriComponentsBuilder
                     .fromHttpUrl(host)
-                    .path("/api/media/")
+                    .path("/api/v1/events/")
                     .path(path)
                     .toUriString();
 
-         //   fileUrls.add(url);
-        //}
         post.setImageUrl(url);
         Event postWithImages= eventService.update(postId, post);
 
-        //return ResponseEntity.status(HttpStatus.CREATED).body(new PostResponse(postWithImages.get()));
         return ResponseEntity.ok(postWithImages);
     }
-
 
     @GetMapping("{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
