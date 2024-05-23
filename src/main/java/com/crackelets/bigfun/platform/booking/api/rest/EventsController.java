@@ -82,7 +82,7 @@ public class EventsController {
             String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
             String url = ServletUriComponentsBuilder
                     .fromHttpUrl(host)
-                    .path("/api/media/")
+                    .path("/api/v1/events/")
                     .path(path)
                     .toUriString();
 
