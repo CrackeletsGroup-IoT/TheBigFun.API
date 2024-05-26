@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 @Service
 public class AzureBlobStorageServiceImpl implements AzureBlobStorageService {
-    private final String string = "";
+    private final String string = "\"DefaultEndpointsProtocol=https;AccountName=thebigfun;AccountKey=bn/4CjRo9kKnEQ5aSKZlkDde9jPI6bvXX7if15AVqGD/3ezntog0RM+ppOd8w+IC90l5fYdO/ven+ASthVvDVA==;EndpointSuffix=core.windows.net\";";
 
     private final String containerName = "the-big-fun-files";
 
