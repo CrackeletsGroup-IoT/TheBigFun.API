@@ -1,6 +1,7 @@
 package com.crackelets.bigfun.platform.payment.domain.model;
 
 
+import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
 import com.crackelets.bigfun.platform.shared.domain.model.AuditModel;
 
 import javax.persistence.*;
@@ -28,8 +29,14 @@ public class Payment extends AuditModel {
 
     @NotNull
     @NotBlank
-    @Size(max=500)
+    private String uuid;
+
+    @NotNull
+    @NotBlank
     private String qrImg;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_attendee_id", nullable = false)
+    private EventAttendee eventAttendee;
 
 }

@@ -1,5 +1,7 @@
 package com.crackelets.bigfun.platform.profile.service;
 
+import com.crackelets.bigfun.platform.booking.domain.model.Event;
+import com.crackelets.bigfun.platform.booking.domain.persistence.EventRepository;
 import com.crackelets.bigfun.platform.profile.domain.model.Organizer;
 import com.crackelets.bigfun.platform.profile.domain.persistence.OrganizerRepository;
 import com.crackelets.bigfun.platform.profile.domain.service.OrganizerService;
@@ -22,9 +24,12 @@ public class OrganizerServiceImpl implements OrganizerService {
     private final OrganizerRepository organizerRepository;
     private final Validator validator;
 
-    public OrganizerServiceImpl(OrganizerRepository organizerRepository, Validator validator) {
+    private final EventRepository eventRepository;
+
+    public OrganizerServiceImpl(OrganizerRepository organizerRepository, Validator validator, EventRepository eventRepository) {
         this.organizerRepository = organizerRepository;
         this.validator = validator;
+        this.eventRepository = eventRepository;
     }
 
 
@@ -45,7 +50,7 @@ public class OrganizerServiceImpl implements OrganizerService {
 
     @Override
     public Organizer getByName(String mame) {
-        var organizerWithName = organizerRepository.findFirstByName(mame);
+        var organizerWithName = organizerRepository.findFirstByUserName(mame);
         if(organizerWithName==null)
             throw new ResourceValidationException(ENTITY,"The organizer doesn't exist.");
         return organizerWithName;
@@ -117,21 +122,15 @@ public class OrganizerServiceImpl implements OrganizerService {
     }
 
     @Override
-    public Organizer addEventToOrganizer(Long organizerId, String eventName) {
-        /*
-
-        return organizerRepository.findById(organizerId).map(organizer->{
-                    return organizerRepository.save(organizer.addEvent(eventName));
-                })
-                .orElseThrow(()->new ResourceNotFoundException(ENTITY,organizerId));*/
-        return null;
-
+    public List<Event> getAllEventsByOrganizerId(Long organizerId) {
+        Organizer organizer = getById(organizerId);
+        return organizer.getEvents().stream().toList();
     }
 
     @Override
-    public Organizer addPayToOrganizer(Long organizerId, Long paymentId) {
-
-         return null;
+    public Event addEventToOrganizer(Long organizerId, Event event) {
+        Organizer organizer = getById(organizerId);
+        event.setOrganizer(organizer);
+        return eventRepository.save(event);
     }
-
 }

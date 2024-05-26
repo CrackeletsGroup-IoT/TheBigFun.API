@@ -1,7 +1,5 @@
 package com.crackelets.bigfun.platform.profile.resource;
 
-import com.crackelets.bigfun.platform.booking.domain.model.Event;
-import com.crackelets.bigfun.platform.profile.domain.model.AttendeeEvent;
 import lombok.*;
 
 import java.util.Set;

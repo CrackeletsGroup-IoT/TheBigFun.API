@@ -2,12 +2,8 @@ package com.crackelets.bigfun.platform.booking.resource;
 
 import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
-import com.crackelets.bigfun.platform.booking.domain.model.EventPayment;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -25,8 +21,7 @@ public class EventResource {
     private String imageUrl;
     private int cost;
     private String district;
-    private Set<EventAttendee> attendeesListByEvent;
-    private Set<EventPayment> payments;
+    private Set<EventAttendee> eventAttendees;
 
     public EventResource(Event event) {
 

@@ -1,5 +1,6 @@
 package com.crackelets.bigfun.platform.booking.domain.model;
 
+import com.crackelets.bigfun.platform.profile.domain.model.Organizer;
 import com.crackelets.bigfun.platform.shared.domain.model.AuditModel;
 import lombok.*;
 
@@ -37,8 +38,6 @@ public class Event extends AuditModel {
     @NotNull
     private int capacity;
 
-    //@ElementCollection
-    //@CollectionTable(name = "event_images", joinColumns = @JoinColumn(name = "event_id"))
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -52,33 +51,14 @@ public class Event extends AuditModel {
     @Size(max = 50)
     @NotNull
     private String district;
-/*    @NotNull
-    private Long organizerId;*/
 
-
-
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
-    private Set<EventAttendee> attendeesListByEvent;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organizer_id", nullable = false)
+    private Organizer organizer;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
-    private Set<EventPayment> payments;
+    private Set<EventAttendee> eventAttendees = new HashSet<>();
 
-    public Event addAttendee(Event event,Long attendeeId){
 
-        if(attendeesListByEvent ==null) attendeesListByEvent = new HashSet<>();
-
-        this.attendeesListByEvent.add(new EventAttendee(this, attendeeId));
-
-        return this;
-    }
-
-    public Event addPayment(Event event,Long paymentId){
-
-        if(payments ==null) payments = new HashSet<>();
-
-        this.payments.add(new EventPayment(this, paymentId));
-
-        return this;
-    }
 
 }

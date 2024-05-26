@@ -1,5 +1,6 @@
 package com.crackelets.bigfun.platform.profile.domain.model;
 
+import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.shared.domain.model.AuditModel;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -41,15 +42,6 @@ public class Organizer extends AuditModel {
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER,mappedBy="organizer")
-    private Set<OrganizerEvent> eventsListByOrganizer;
-
-    public Organizer addEvent(Organizer organizer,long eventId){
-        if(eventsListByOrganizer==null) eventsListByOrganizer=new HashSet<>();
-        this.eventsListByOrganizer.add(new OrganizerEvent(this,eventId));
-
-        return this;
-    }
-
-
+    private Set<Event> events = new HashSet<>();
 
 }

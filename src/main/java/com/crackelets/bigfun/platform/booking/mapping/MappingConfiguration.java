@@ -1,7 +1,6 @@
 package com.crackelets.bigfun.platform.booking.mapping;
 
 
-import com.crackelets.bigfun.platform.booking.domain.model.EventPayment;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

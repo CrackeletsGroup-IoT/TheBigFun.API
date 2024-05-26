@@ -1,5 +1,6 @@
 package com.crackelets.bigfun.platform.profile.domain.service;
 
+import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.profile.domain.model.Organizer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +24,8 @@ public interface OrganizerService {
 
     ResponseEntity<?> delete (Long organizerId);
 
+    List<Event> getAllEventsByOrganizerId(Long organizerId);
 
-
-    Organizer addEventToOrganizer(Long organizerId, String eventName);
-
-    //ver  para el pago!!!!!!!!
-    Organizer addPayToOrganizer(Long organizerId, Long paymentId);
-
-
+    Event addEventToOrganizer(Long organizerId, Event event);
 
 }

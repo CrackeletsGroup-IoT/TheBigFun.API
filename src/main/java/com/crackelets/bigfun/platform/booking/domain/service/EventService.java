@@ -22,7 +22,6 @@ public interface EventService {
 
     ResponseEntity<?> delete(Long eventId);
 
-    //List<Event> getAllByOrganizerId(Long id);
     Event addAttendeeToEvent(Long eventId, Long attendeeId);
 
 

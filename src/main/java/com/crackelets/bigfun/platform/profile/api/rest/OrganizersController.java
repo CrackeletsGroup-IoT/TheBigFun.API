@@ -1,8 +1,9 @@
 package com.crackelets.bigfun.platform.profile.api.rest;
 
+import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.booking.mapping.EventMapper;
+import com.crackelets.bigfun.platform.booking.resource.CreateEventResource;
 import com.crackelets.bigfun.platform.booking.resource.EventResource;
-import com.crackelets.bigfun.platform.profile.domain.service.EventFilterService;
 import com.crackelets.bigfun.platform.profile.domain.service.OrganizerService;
 import com.crackelets.bigfun.platform.profile.mapping.OrganizerMapper;
 import com.crackelets.bigfun.platform.profile.resource.CreateOrganizerResource;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value="/api/v1/organizers", produces="application/json")
 public class OrganizersController {
@@ -21,11 +24,6 @@ public class OrganizersController {
     private OrganizerService organizerService;
     private OrganizerMapper organizerMapper;
     private EventMapper eventMapper;
-
-    private EventFilterService eventFilterService;
-
-
-
 
     public OrganizersController(OrganizerService organizerService, OrganizerMapper mapper1, EventMapper mapper2) {
         this.organizerService = organizerService;
@@ -66,6 +64,16 @@ public class OrganizersController {
     @DeleteMapping("{organizerId}")
     public ResponseEntity<?> deleteOrganizer(@PathVariable Long organizerId){
         return organizerService.delete(organizerId);
+    }
+
+    @GetMapping("/{organizerId}/events")
+    public List<Event> getAllEventsByOrganizerId(@PathVariable Long organizerId) {
+        return organizerService.getAllEventsByOrganizerId(organizerId);
+    }
+
+    @PostMapping("/{organizerId}/events")
+    public EventResource addEventToOrganizer(@PathVariable Long organizerId, @RequestBody Event event) {
+        return eventMapper.toResource(organizerService.addEventToOrganizer(organizerId, event));
     }
 
 }

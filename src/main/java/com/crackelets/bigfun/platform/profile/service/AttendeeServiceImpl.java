@@ -47,7 +47,7 @@ public class AttendeeServiceImpl implements AttendeeService {
 
     @Override
     public Attendee getByName(String name) {
-        var attendeeWithName = attendeeRepository.findFirstByName(name);
+        var attendeeWithName = attendeeRepository.findByUserName(name);
         if(attendeeWithName==null)
             throw new ResourceValidationException(ENTITY,"The attendee doesn't exist.");
         return attendeeWithName;
