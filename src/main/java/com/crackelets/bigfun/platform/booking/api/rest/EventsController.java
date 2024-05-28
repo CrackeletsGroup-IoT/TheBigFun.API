@@ -8,6 +8,7 @@ import com.crackelets.bigfun.platform.booking.resource.CreateEventResource;
 import com.crackelets.bigfun.platform.booking.resource.EventResource;
 import com.crackelets.bigfun.platform.booking.resource.UpdateEventResource;
 import com.crackelets.bigfun.platform.shared.services.media.StorageService;
+import com.crackelets.bigfun.platform.storage.service.MyFileService;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,13 +36,15 @@ public class EventsController {
 
     private final StorageService storageService;
     private final HttpServletRequest request;
+    private final MyFileService myFileService;
 
 
-    public EventsController(EventService eventService, EventMapper mapper, StorageService storageService, HttpServletRequest request) {
+    public EventsController(EventService eventService, EventMapper mapper, StorageService storageService, HttpServletRequest request, MyFileService myFileService) {
         this.eventService = eventService;
         this.mapper = mapper;
         this.storageService = storageService;
         this.request = request;
+      this.myFileService = myFileService;
     }
 
     @GetMapping
@@ -70,28 +73,29 @@ public class EventsController {
     @DeleteMapping("{eventId}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long eventId){ return eventService.delete(eventId);}
 
-    @PostMapping("{postId}/upload")
-    public ResponseEntity<Event> uploadFiles(@PathVariable Long postId, @RequestParam("file") MultipartFile file) {
+    @PostMapping("{eventId}/upload")
+    public ResponseEntity<Event> uploadFiles(@PathVariable Long eventId, @RequestParam("file") MultipartFile file) throws IOException {
 
-        Event post = eventService.getById(postId);
+        Event post = eventService.getById(eventId);
 
-        if (post == null)
-            return ResponseEntity.notFound().build();
+        if (post == null) return ResponseEntity.notFound().build();
 
-            String path = storageService.storage(file);
-            String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-            String url = ServletUriComponentsBuilder
+        String path = storageService.storage(file);
+        String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
+        String url = ServletUriComponentsBuilder
                     .fromHttpUrl(host)
                     .path("/api/v1/events/")
                     .path(path)
                     .toUriString();
 
-        post.setImageUrl(url);
-        Event postWithImages= eventService.update(postId, post);
+        String stringUrl = myFileService.uploadFile(file, "event" +eventId+ "image", "the-big-fun-files");
+        post.setImageUrl(stringUrl);
+        Event postWithImages= eventService.update(eventId, post);
 
         return ResponseEntity.ok(postWithImages);
     }
 
+    /*
     @GetMapping("{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
         Resource file = storageService.loadAsResource(filename);
@@ -101,7 +105,7 @@ public class EventsController {
                 .ok()
                 .header(HttpHeaders.CONTENT_TYPE, contentType)
                 .body(file);
-    }
+    }*/
 
 
 
