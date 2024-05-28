@@ -88,7 +88,7 @@ public class EventsController {
                     .path(path)
                     .toUriString();
 
-        String stringUrl = myFileService.uploadFile(file, "event" +eventId+ "image" + file.getName(), "the-big-fun-files");
+        String stringUrl = myFileService.uploadFile(file, "event" +eventId+ "image" + file.getOriginalFilename(), "the-big-fun-files");
         post.setImageUrl(stringUrl);
         Event postWithImages= eventService.update(eventId, post);
 
