@@ -48,7 +48,7 @@ private final PaymentMapper mapper;
     @Value("${qr.api.access.token}")
     private String qrApiAccessToken;
 
-    @PostMapping("/generateQR")
+    @GetMapping("/generateQR")
     public ResponseEntity<?> generateQRCode(@RequestParam("uuid") String uuid) {
         RestTemplate restTemplate = new RestTemplate();
 
