@@ -69,8 +69,12 @@ private final PaymentMapper mapper;
         // Realizar la solicitud POST y obtener la respuesta como un arreglo de bytes
         ResponseEntity<?> response = restTemplate.postForEntity(url, requestEntity, byte[].class);
 
+        // Configurar los encabezados de la respuesta
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.IMAGE_PNG);
+
         // Devolver la respuesta recibida del servicio de generación de códigos QR
-        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+        return new ResponseEntity<>(response.getBody(), responseHeaders, response.getStatusCode());
     }
 
     @DeleteMapping("{paymentId}")
