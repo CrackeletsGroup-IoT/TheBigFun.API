@@ -1,18 +1,24 @@
 package com.crackelets.bigfun.platform.payment.api.rest;
 
+import com.crackelets.bigfun.platform.booking.domain.model.Event;
+import com.crackelets.bigfun.platform.payment.domain.model.Payment;
 import com.crackelets.bigfun.platform.payment.domain.service.PaymentService;
 import com.crackelets.bigfun.platform.payment.mapping.PaymentMapper;
 import com.crackelets.bigfun.platform.payment.resource.CreatePaymentResource;
 import com.crackelets.bigfun.platform.payment.resource.PaymentResource;
 import com.crackelets.bigfun.platform.payment.resource.QRCodeRequest;
+import com.crackelets.bigfun.platform.storage.service.MyFileService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -20,11 +26,13 @@ import java.util.Map;
 public class PaymentController {
 private final PaymentService paymentService;
 private final PaymentMapper mapper;
+    private final MyFileService myFileService;
 
 
-    public PaymentController(PaymentService paymentService, PaymentMapper mapper) {
+    public PaymentController(PaymentService paymentService, PaymentMapper mapper, MyFileService myFileService) {
         this.paymentService = paymentService;
         this.mapper = mapper;
+      this.myFileService = myFileService;
     }
 
     @GetMapping
@@ -81,4 +89,19 @@ private final PaymentMapper mapper;
     public ResponseEntity<?> deletePayment(@PathVariable Long paymentId){
         return paymentService.delete(paymentId);
     }
+
+    @PostMapping("{paymentId}/upload")
+    public ResponseEntity<Payment> uploadFiles(@PathVariable Long paymentId, @RequestParam("file") MultipartFile file) throws IOException {
+
+        Payment payment = paymentService.getById(paymentId);
+
+        if (payment == null) return ResponseEntity.notFound().build();
+
+        String stringUrl = myFileService.uploadFile(file, "payment"+ paymentId + "qr.png", "the-big-fun-qr");
+        payment.setQrImg(stringUrl);
+        Payment postWithImages= paymentService.update(paymentId, payment);
+
+        return ResponseEntity.ok(postWithImages);
+    }
+
 }

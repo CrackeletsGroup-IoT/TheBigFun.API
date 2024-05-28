@@ -16,8 +16,5 @@ public class CreatePaymentResource {
 
     private Date date;
 
-    @NotNull
-    @NotBlank
-    @Size(max = 500)
     private String qrImg;
 }
