@@ -1,5 +1,6 @@
 package com.crackelets.bigfun.platform.payment.service;
 
+import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.payment.domain.model.Payment;
 import com.crackelets.bigfun.platform.payment.domain.persistence.PaymentRepository;
 import com.crackelets.bigfun.platform.payment.domain.service.PaymentService;
@@ -57,7 +58,14 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment update(Long id, Payment payment) {
-        return null;
+        Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
+
+        if (!violations.isEmpty())
+            throw  new ResourceValidationException(ENTITY, violations);
+
+        return paymentRepository.findById(id).map(paymentToUpdate -> paymentRepository.save(
+            paymentToUpdate.withDate(payment.getDate()).withQrImg(payment.getQrImg())))
+          .orElseThrow(() -> new ResourceNotFoundException(ENTITY, id));
     }
 
     @Override

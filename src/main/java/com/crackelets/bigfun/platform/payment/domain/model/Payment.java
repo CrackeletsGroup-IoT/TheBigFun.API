@@ -26,9 +26,6 @@ public class Payment extends AuditModel {
 
     private Date date;
 
-    @NotNull
-    @NotBlank
-    @Size(max=500)
     private String qrImg;
 
 
