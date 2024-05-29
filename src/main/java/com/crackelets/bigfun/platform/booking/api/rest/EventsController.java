@@ -52,6 +52,12 @@ public class EventsController {
         return mapper.modelListPage(eventService.getAll(), pageable);
     }
 
+    @GetMapping("{eventId}")
+    public EventResource getEventById(@PathVariable Long eventId){
+        return mapper.toResource(eventService.getById(eventId));
+    }
+
+
     @PostMapping
     public ResponseEntity<EventResource> createEvent(@RequestBody CreateEventResource resource){
         return new ResponseEntity<>(mapper.toResource(eventService.create(mapper.toModel(resource))), HttpStatus.CREATED);
