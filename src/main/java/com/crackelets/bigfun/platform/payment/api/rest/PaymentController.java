@@ -104,4 +104,8 @@ private final PaymentMapper mapper;
         return ResponseEntity.ok(postWithImages);
     }
 
+    @GetMapping("/uuid/{uuid}")
+    public PaymentResource getPaymentByUuid(@PathVariable String uuid){
+        return mapper.toResource(paymentService.getByUuid(uuid));
+    }
 }

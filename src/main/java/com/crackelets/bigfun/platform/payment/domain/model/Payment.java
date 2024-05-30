@@ -26,6 +26,8 @@ public class Payment extends AuditModel {
 
     private Date date;
 
+    private String uuid;
+
     private String qrImg;
 
 

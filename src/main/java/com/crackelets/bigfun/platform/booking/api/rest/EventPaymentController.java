@@ -6,6 +6,7 @@ import com.crackelets.bigfun.platform.booking.domain.persistence.EventRepository
 import com.crackelets.bigfun.platform.booking.domain.service.EventPaymentService;
 import com.crackelets.bigfun.platform.booking.mapping.EventPaymentMapper;
 import com.crackelets.bigfun.platform.booking.resource.EventPaymentResource;
+import com.crackelets.bigfun.platform.payment.resource.PaymentResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class EventPaymentController {
     public ResponseEntity<?>addPaymentToEvent(@PathVariable Long eventId,@PathVariable Long paymentId){
         Event event=eventRepository.findById(eventId).orElseThrow(()->new RuntimeException("The event doesn't exist"));
 
-        event.addPayment(event,paymentId);
+        //event.addPayment(event,paymentId);
         eventRepository.save(event);
 
         return ResponseEntity.ok("Payment was added correctly");

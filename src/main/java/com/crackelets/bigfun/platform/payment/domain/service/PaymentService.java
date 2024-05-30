@@ -14,5 +14,6 @@ public interface PaymentService {
     Payment create(Payment payment);
     Payment update(Long id, Payment payment);
     ResponseEntity<?> delete(Long paymentId);
+    Payment getByUuid(String uuid);
 
 }

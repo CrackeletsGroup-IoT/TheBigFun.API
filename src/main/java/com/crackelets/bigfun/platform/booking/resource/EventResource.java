@@ -26,7 +26,6 @@ public class EventResource {
     private int cost;
     private String district;
     private Set<EventAttendee> attendeesListByEvent;
-    private Set<EventPayment> payments;
 
     public EventResource(Event event) {
 

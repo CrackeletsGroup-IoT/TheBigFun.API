@@ -15,6 +15,6 @@ import java.util.Date;
 public class CreatePaymentResource {
 
     private Date date;
-
+    private String uuid;
     private String qrImg;
 }

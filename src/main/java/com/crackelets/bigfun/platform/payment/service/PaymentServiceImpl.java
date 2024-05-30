@@ -75,4 +75,10 @@ public class PaymentServiceImpl implements PaymentService {
             return ResponseEntity.ok().build();})
                 .orElseThrow(()->new ResourceNotFoundException(ENTITY,paymentId));
     }
+
+    @Override
+    public Payment getByUuid(String uuid) {
+        return paymentRepository.findByUuid(uuid)
+                .orElseThrow(()-> new ResourceNotFoundException(ENTITY));
+    }
 }
