@@ -60,23 +60,11 @@ public class Event extends AuditModel {
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
     private Set<EventAttendee> attendeesListByEvent;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
-    private Set<EventPayment> payments;
-
     public Event addAttendee(Event event,Long attendeeId){
 
         if(attendeesListByEvent ==null) attendeesListByEvent = new HashSet<>();
 
         this.attendeesListByEvent.add(new EventAttendee(this, attendeeId));
-
-        return this;
-    }
-
-    public Event addPayment(Event event,Long paymentId){
-
-        if(payments ==null) payments = new HashSet<>();
-
-        this.payments.add(new EventPayment(this, paymentId));
 
         return this;
     }
