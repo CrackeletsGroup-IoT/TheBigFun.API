@@ -91,7 +91,7 @@ private final PaymentMapper mapper;
     }
 
     @PostMapping("{paymentId}/upload")
-    public ResponseEntity<Payment> uploadFiles(@PathVariable Long paymentId, @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<PaymentResource> uploadFiles(@PathVariable Long paymentId, @RequestParam("file") MultipartFile file) throws IOException {
 
         Payment payment = paymentService.getById(paymentId);
 
@@ -101,7 +101,7 @@ private final PaymentMapper mapper;
         payment.setQrImg(stringUrl);
         Payment postWithImages= paymentService.update(paymentId, payment);
 
-        return ResponseEntity.ok(postWithImages);
+        return ResponseEntity.ok(mapper.toResource(postWithImages));
     }
 
     @GetMapping("/uuid/{uuid}")
