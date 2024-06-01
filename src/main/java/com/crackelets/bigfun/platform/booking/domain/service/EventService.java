@@ -17,12 +17,12 @@ public interface EventService {
     Event getById(long eventId);
 
 
-    Event create(Event event);
+    Event create(Event event, Long organizerId);
     Event update(Long eventId, Event event);
 
     ResponseEntity<?> delete(Long eventId);
 
-    //List<Event> getAllByOrganizerId(Long id);
+    List<Event> getAllByOrganizerId(Long id);
     Event addAttendeeToEvent(Long eventId, Long attendeeId);
 
 

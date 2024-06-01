@@ -115,23 +115,4 @@ public class OrganizerServiceImpl implements OrganizerService {
                     return ResponseEntity.ok().build();})
                 .orElseThrow(()->new ResourceNotFoundException(ENTITY,organizerId));
     }
-
-    @Override
-    public Organizer addEventToOrganizer(Long organizerId, String eventName) {
-        /*
-
-        return organizerRepository.findById(organizerId).map(organizer->{
-                    return organizerRepository.save(organizer.addEvent(eventName));
-                })
-                .orElseThrow(()->new ResourceNotFoundException(ENTITY,organizerId));*/
-        return null;
-
-    }
-
-    @Override
-    public Organizer addPayToOrganizer(Long organizerId, Long paymentId) {
-
-         return null;
-    }
-
 }

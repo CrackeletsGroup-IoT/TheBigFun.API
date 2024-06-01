@@ -3,6 +3,8 @@ package com.crackelets.bigfun.platform.booking.resource;
 import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
 import com.crackelets.bigfun.platform.booking.domain.model.EventPayment;
+import com.crackelets.bigfun.platform.profile.domain.model.Organizer;
+import com.crackelets.bigfun.platform.profile.resource.OrganizerResource;
 import lombok.*;
 
 import java.util.ArrayList;

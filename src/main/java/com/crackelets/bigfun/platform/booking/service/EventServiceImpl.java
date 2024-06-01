@@ -4,16 +4,20 @@ package com.crackelets.bigfun.platform.booking.service;
 import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.booking.domain.persistence.EventRepository;
 import com.crackelets.bigfun.platform.booking.domain.service.EventService;
+import com.crackelets.bigfun.platform.profile.domain.model.Organizer;
+import com.crackelets.bigfun.platform.profile.domain.persistence.OrganizerRepository;
 import com.crackelets.bigfun.platform.shared.exception.ResourceNotFoundException;
 import com.crackelets.bigfun.platform.shared.exception.ResourceValidationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -23,11 +27,13 @@ public class EventServiceImpl implements EventService {
     private static final String ENTITY = "Event";
 
     private final EventRepository eventRepository;
+    private final OrganizerRepository organizerRepository;
 
     private final Validator validator;
 
-    public EventServiceImpl(EventRepository eventRepository, Validator validator) {
+    public EventServiceImpl(EventRepository eventRepository, OrganizerRepository organizerRepository, Validator validator) {
         this.eventRepository = eventRepository;
+        this.organizerRepository = organizerRepository;
         this.validator = validator;
     }
 
@@ -48,7 +54,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event create(Event event) {
+    public Event create(Event event, Long organizerId) {
         Set<ConstraintViolation<Event>> violations= validator.validate(event);
 
         if (!violations.isEmpty())
@@ -59,7 +65,15 @@ public class EventServiceImpl implements EventService {
         if(eventWithName != null)
             throw new ResourceValidationException(ENTITY, "An event with the same name already exists. ");
 
-        return eventRepository.save(event);
+        Optional<Organizer> organizerOptional = organizerRepository.findOrganizerById(organizerId);
+
+        if (organizerOptional.isPresent()){
+            Organizer organizer = organizerOptional.get();
+            event.setOrganizer(organizer);
+            return eventRepository.save(event);
+        }
+
+       throw new RuntimeException("Organizer not found with id " + organizerId);
 
     }
 
@@ -95,10 +109,11 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(()-> new ResourceNotFoundException(ENTITY, eventId));
     }
 
-/*    @Override
+   @Override
+   @Transactional
     public List<Event> getAllByOrganizerId(Long id) {
         return eventRepository.findAllByOrganizerId(id);
-    }*/
+    }
 
 
     @Override
@@ -107,4 +122,5 @@ public class EventServiceImpl implements EventService {
             return eventRepository.save(event.addAttendee(event,eventAttendeeId));
         }).orElseThrow(()->new ResourceNotFoundException(ENTITY,eventId));
     }
+
 }

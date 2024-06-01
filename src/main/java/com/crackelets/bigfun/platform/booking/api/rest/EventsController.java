@@ -58,9 +58,9 @@ public class EventsController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<EventResource> createEvent(@RequestBody CreateEventResource resource){
-        return new ResponseEntity<>(mapper.toResource(eventService.create(mapper.toModel(resource))), HttpStatus.CREATED);
+    @PostMapping("{organizerId}")
+    public ResponseEntity<EventResource> createEvent(@RequestBody CreateEventResource resource, @PathVariable Long organizerId){
+        return new ResponseEntity<>(mapper.toResource(eventService.create(mapper.toModel(resource), organizerId)), HttpStatus.CREATED);
     }
 
     //@PostMapping()
@@ -71,10 +71,12 @@ public class EventsController {
         return mapper.toResource(eventService.update(eventId, mapper.toModel(resource)));
     }
 
-/*    @GetMapping("org/{organizerId}")
-    public Page<EventResource> getAllEventsByOrginerId(Pageable pageable,@PathVariable Long organizerId){
-        return mapper.modelListPage(eventService.getAllByOrganizerId(organizerId), pageable);
-    }*/
+    @GetMapping("/organizer/{organizerId}") // New endpoint
+    public ResponseEntity<Page<EventResource>> getEventsByOrganizerId(@PathVariable Long organizerId, Pageable pageable) {
+        List<Event> events = eventService.getAllByOrganizerId(organizerId);
+        return new ResponseEntity<>(mapper.modelListPage(events, pageable), HttpStatus.OK);
+    }
+
 
     @DeleteMapping("{eventId}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long eventId){ return eventService.delete(eventId);}

@@ -1,5 +1,6 @@
 package com.crackelets.bigfun.platform.booking.domain.model;
 
+import com.crackelets.bigfun.platform.profile.domain.model.Organizer;
 import com.crackelets.bigfun.platform.shared.domain.model.AuditModel;
 import lombok.*;
 
@@ -52,10 +53,10 @@ public class Event extends AuditModel {
     @Size(max = 50)
     @NotNull
     private String district;
-/*    @NotNull
-    private Long organizerId;*/
 
-    private Boolean attendingEvent = false;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "organizer_id")
+    private Organizer organizer;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
     private Set<EventAttendee> attendeesListByEvent;
