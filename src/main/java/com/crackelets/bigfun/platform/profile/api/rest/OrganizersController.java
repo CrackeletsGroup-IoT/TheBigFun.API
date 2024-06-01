@@ -1,8 +1,6 @@
 package com.crackelets.bigfun.platform.profile.api.rest;
 
 import com.crackelets.bigfun.platform.booking.mapping.EventMapper;
-import com.crackelets.bigfun.platform.booking.resource.EventResource;
-import com.crackelets.bigfun.platform.profile.domain.service.EventFilterService;
 import com.crackelets.bigfun.platform.profile.domain.service.OrganizerService;
 import com.crackelets.bigfun.platform.profile.mapping.OrganizerMapper;
 import com.crackelets.bigfun.platform.profile.resource.CreateOrganizerResource;
@@ -21,10 +19,6 @@ public class OrganizersController {
     private OrganizerService organizerService;
     private OrganizerMapper organizerMapper;
     private EventMapper eventMapper;
-
-    private EventFilterService eventFilterService;
-
-
 
 
     public OrganizersController(OrganizerService organizerService, OrganizerMapper mapper1, EventMapper mapper2) {

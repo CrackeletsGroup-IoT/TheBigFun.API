@@ -1,8 +1,9 @@
 package com.crackelets.bigfun.platform.profile.resource;
 
-import com.crackelets.bigfun.platform.profile.domain.model.OrganizerEvent;
+import com.crackelets.bigfun.platform.booking.resource.EventResource;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -17,5 +18,5 @@ public class OrganizerResource {
     private String userName;
     private String name;
     private String email;
-    private Set<OrganizerEvent> eventsListByOrganizer;
+    private Set<EventResource> events;
 }
