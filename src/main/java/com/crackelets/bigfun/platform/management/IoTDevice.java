@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @With
 @Entity
-@Table(name = "iot_device")
+@Table(name = "iot_devices")
 public class IoTDevice {
 
     @Id

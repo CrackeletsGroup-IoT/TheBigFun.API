@@ -5,6 +5,7 @@ import com.crackelets.bigfun.platform.security.domain.service.communication.Auth
 import com.crackelets.bigfun.platform.security.domain.service.communication.RegisterRequest;
 import com.crackelets.bigfun.platform.security.mapping.UserMapper;
 import com.crackelets.bigfun.platform.security.resource.UserResource;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,7 @@ public class UserController {
         return userService.register(request);
     }
 
+    @Operation(summary = "Get all users")
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllUsers(Pageable pageable) {

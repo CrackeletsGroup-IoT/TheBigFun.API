@@ -1,6 +1,8 @@
 package com.crackelets.bigfun.platform.payment.api.rest;
 
 import com.crackelets.bigfun.platform.booking.domain.model.Event;
+import com.crackelets.bigfun.platform.booking.resource.CreateEventResource;
+import com.crackelets.bigfun.platform.booking.resource.EventResource;
 import com.crackelets.bigfun.platform.payment.domain.model.Payment;
 import com.crackelets.bigfun.platform.payment.domain.service.PaymentService;
 import com.crackelets.bigfun.platform.payment.mapping.PaymentMapper;
@@ -8,6 +10,7 @@ import com.crackelets.bigfun.platform.payment.resource.CreatePaymentResource;
 import com.crackelets.bigfun.platform.payment.resource.PaymentResource;
 import com.crackelets.bigfun.platform.payment.resource.QRCodeRequest;
 import com.crackelets.bigfun.platform.storage.service.MyFileService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,18 +38,23 @@ private final PaymentMapper mapper;
       this.myFileService = myFileService;
     }
 
+    @Operation(summary = "Get all payments")
     @GetMapping
     public Page<PaymentResource> getAllPayments(Pageable pageable){
         return mapper.modelListPage(paymentService.getAll(), pageable);
     }
+
+    @Operation(summary = "Get a payment by id")
     @GetMapping("{paymentId}")
     public PaymentResource getPaymentById(@PathVariable Long paymentId){
         return mapper.toResource(paymentService.getById(paymentId));
     }
-    @PostMapping
-    public ResponseEntity<PaymentResource> createPayment(@RequestBody CreatePaymentResource resource){
-        return  new ResponseEntity<>(mapper.toResource(paymentService.create(mapper.toModel(resource))), HttpStatus.CREATED);
+
+    @PostMapping("{eventAttendeeId}")
+    public ResponseEntity<PaymentResource> createPayment(@RequestBody CreatePaymentResource resource, @PathVariable Long eventAttendeeId){
+        return  new ResponseEntity<>(mapper.toResource(paymentService.create(mapper.toModel(resource), eventAttendeeId)), HttpStatus.CREATED);
     }
+
 
     @Value("${qr.api.url}")
     private String qrApiUrl;
@@ -56,6 +64,7 @@ private final PaymentMapper mapper;
     @Value("${qr.api.access.token}")
     private String qrApiAccessToken;
 
+    @Operation(summary = "Get a qr for a payment")
     @GetMapping("/generateQR")
     public ResponseEntity<?> generateQRCode(@RequestParam("uuid") String uuid) {
         RestTemplate restTemplate = new RestTemplate();
@@ -85,11 +94,13 @@ private final PaymentMapper mapper;
         return new ResponseEntity<>(response.getBody(), responseHeaders, response.getStatusCode());
     }
 
+    @Operation(summary = "Delete a payment")
     @DeleteMapping("{paymentId}")
     public ResponseEntity<?> deletePayment(@PathVariable Long paymentId){
         return paymentService.delete(paymentId);
     }
 
+    @Operation(summary = "Post QR of a payment")
     @PostMapping("{paymentId}/upload")
     public ResponseEntity<PaymentResource> uploadFiles(@PathVariable Long paymentId, @RequestParam("file") MultipartFile file) throws IOException {
 
@@ -104,6 +115,7 @@ private final PaymentMapper mapper;
         return ResponseEntity.ok(mapper.toResource(postWithImages));
     }
 
+    @Operation(summary = "Get payment by uuid")
     @GetMapping("/uuid/{uuid}")
     public PaymentResource getPaymentByUuid(@PathVariable String uuid){
         return mapper.toResource(paymentService.getByUuid(uuid));

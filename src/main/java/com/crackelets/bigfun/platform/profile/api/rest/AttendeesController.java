@@ -35,17 +35,17 @@ public class AttendeesController {
         return mapper.modelListPage(attendeeService.getAll(), pageable);
     }
 
+    @Operation(summary = "Get a attendee by id")
     @GetMapping("{attendeeId}")
     public AttendeeResource getAttendeeById(@PathVariable Long attendeeId) {
         return mapper.toResource(attendeeService.getById(attendeeId));
     }
 
+    @Operation(summary = "Get a attendee by username")
     @GetMapping("byname/{name}")
     public AttendeeResource getByName(@PathVariable String name){
         return mapper.toResource(attendeeService.getByName(name));
     }
-
-
 
     @Operation(summary = "Create attendees", responses = {
             @ApiResponse(description = "Attendee successfully created",responseCode = "201",
@@ -56,11 +56,13 @@ public class AttendeesController {
         return new ResponseEntity<>(mapper.toResource(attendeeService.create(mapper.toModel(resource))), HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Edit a attendee by id")
     @PutMapping("{attendeeId}")  // Update
     public AttendeeResource updateAttendee(@PathVariable Long attendeeId, @RequestBody UpdateAttendeeResource resource) {
         return mapper.toResource(attendeeService.update(attendeeId, mapper.toModel(resource)));
     }
 
+    @Operation(summary = "Delete a attendee by id")
     @DeleteMapping("{attendeeId}")
     public ResponseEntity<?> deleteAttendee(@PathVariable Long attendeeId) {
         return attendeeService.delete(attendeeId);

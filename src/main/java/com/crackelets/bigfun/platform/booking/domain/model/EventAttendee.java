@@ -2,6 +2,7 @@
 package com.crackelets.bigfun.platform.booking.domain.model;
 
 import com.crackelets.bigfun.platform.management.IoTDevice;
+import com.crackelets.bigfun.platform.payment.domain.model.Payment;
 import com.crackelets.bigfun.platform.shared.domain.model.AuditModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;import lombok.*;
@@ -28,10 +29,9 @@ public class EventAttendee {
     @OneToOne(mappedBy = "eventAttendee", cascade = CascadeType.ALL)
     private IoTDevice ioTDevice =null;
 
-    public EventAttendee(Event event, Long attendeeId) {
-        this.event = event;
-        this.attendeeId = attendeeId;
-    }
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
 
 
 

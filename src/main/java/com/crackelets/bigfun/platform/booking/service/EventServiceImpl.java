@@ -1,6 +1,4 @@
 package com.crackelets.bigfun.platform.booking.service;
-
-
 import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.booking.domain.persistence.EventRepository;
 import com.crackelets.bigfun.platform.booking.domain.service.EventService;
@@ -113,14 +111,6 @@ public class EventServiceImpl implements EventService {
    @Transactional
     public List<Event> getAllByOrganizerId(Long id) {
         return eventRepository.findAllByOrganizerId(id);
-    }
-
-
-    @Override
-    public Event addAttendeeToEvent(Long eventId, Long eventAttendeeId) {
-        return eventRepository.findById(eventId).map(event -> {
-            return eventRepository.save(event.addAttendee(event,eventAttendeeId));
-        }).orElseThrow(()->new ResourceNotFoundException(ENTITY,eventId));
     }
 
 }

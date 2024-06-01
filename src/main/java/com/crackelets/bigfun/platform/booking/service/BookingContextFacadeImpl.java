@@ -18,8 +18,4 @@ public class BookingContextFacadeImpl implements BookingContextFacade {
         return eventService.getAll();
     }
 
-/*    @Override
-    public List<Event> getAllByOrganizerId(Long id) {
-        return eventService.getAllByOrganizerId(id);
-    }*/
 }
