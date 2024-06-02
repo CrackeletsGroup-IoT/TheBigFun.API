@@ -14,7 +14,9 @@ import javax.persistence.*;import lombok.*;
 @NoArgsConstructor
 @With
 @Entity
-@Table(name="event_attendees")
+@Table(name = "event_attendees", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"event_id", "attendee_id"})
+})
 public class EventAttendee {
 
     @Id
@@ -32,7 +34,7 @@ public class EventAttendee {
     private Attendee attendee;
 
     @OneToOne(mappedBy = "eventAttendee", cascade = CascadeType.ALL)
-    private IoTDevice ioTDevice =null;
+    private IoTDevice ioTDevice;
 
     @OneToOne
     @JoinColumn(name = "payment_id")
