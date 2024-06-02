@@ -9,8 +9,9 @@ import java.util.Optional;
 
 public interface EventAttendeeRepository extends JpaRepository<EventAttendee, Long> {
 
-    Optional<EventAttendee> findByEventId(Long id);
+    Optional<EventAttendee> findEventAttendeeById(Long id);
 
-    List<EventAttendee> findAllByAttendeeId(Long attendeeId);
-    List<EventAttendee> findAllByEvent(Optional<Event> event);
+    List<EventAttendee> findAllByEvent_Id(Long eventId);
+
+    List<EventAttendee> findAllByAttendee_Id(Long attendeeId);
 }

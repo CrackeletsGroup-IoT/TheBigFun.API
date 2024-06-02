@@ -2,6 +2,8 @@
 package com.crackelets.bigfun.platform.booking.domain.model;
 
 import com.crackelets.bigfun.platform.management.IoTDevice;
+import com.crackelets.bigfun.platform.payment.domain.model.Payment;
+import com.crackelets.bigfun.platform.profile.domain.model.Attendee;
 import com.crackelets.bigfun.platform.shared.domain.model.AuditModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;import lombok.*;
@@ -12,7 +14,9 @@ import javax.persistence.*;import lombok.*;
 @NoArgsConstructor
 @With
 @Entity
-@Table(name="event_attendees")
+@Table(name = "event_attendees", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"event_id", "attendee_id"})
+})
 public class EventAttendee {
 
     @Id
@@ -23,15 +27,18 @@ public class EventAttendee {
     @JoinColumn(name = "event_id",nullable = false)
     @JsonIgnore
     private Event event;
-    private Long attendeeId;
+
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
+    @JoinColumn(name = "attendee_id",nullable = false)
+    @JsonIgnore
+    private Attendee attendee;
 
     @OneToOne(mappedBy = "eventAttendee", cascade = CascadeType.ALL)
-    private IoTDevice ioTDevice =null;
+    private IoTDevice ioTDevice;
 
-    public EventAttendee(Event event, Long attendeeId) {
-        this.event = event;
-        this.attendeeId = attendeeId;
-    }
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
 
 
 

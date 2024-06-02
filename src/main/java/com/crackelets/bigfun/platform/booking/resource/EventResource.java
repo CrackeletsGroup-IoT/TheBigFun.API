@@ -2,14 +2,8 @@ package com.crackelets.bigfun.platform.booking.resource;
 
 import com.crackelets.bigfun.platform.booking.domain.model.Event;
 import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
-import com.crackelets.bigfun.platform.booking.domain.model.EventPayment;
-import com.crackelets.bigfun.platform.profile.domain.model.Organizer;
-import com.crackelets.bigfun.platform.profile.resource.OrganizerResource;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -27,29 +21,5 @@ public class EventResource {
     private String imageUrl;
     private int cost;
     private String district;
-    private Set<EventAttendee> attendeesListByEvent;
-
-    public EventResource(Event event) {
-
-
-        this.id = event.getId();
-        this.name = event.getName();
-        this.address = event.getAddress();
-        this.capacity = event.getCapacity();
-        this.date = event.getDate();
-        this.cost = event.getCost();
-
-        String postImageUrl = event.getImageUrl();
-        if (postImageUrl != null) {
-            this.imageUrl = postImageUrl;
-        } else {
-            this.imageUrl ="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
-        }
-
-        this.district = event.getDistrict();
-    }
-
-
-
 
 }

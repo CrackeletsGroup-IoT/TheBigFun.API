@@ -9,6 +9,7 @@ import com.crackelets.bigfun.platform.booking.resource.EventResource;
 import com.crackelets.bigfun.platform.booking.resource.UpdateEventResource;
 import com.crackelets.bigfun.platform.shared.services.media.StorageService;
 import com.crackelets.bigfun.platform.storage.service.MyFileService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,73 +48,54 @@ public class EventsController {
       this.myFileService = myFileService;
     }
 
+    @Operation(summary = "Get all events")
     @GetMapping
     public Page<EventResource> getAllEvents(Pageable pageable){
         return mapper.modelListPage(eventService.getAll(), pageable);
     }
 
+    @Operation(summary = "Get a event by id")
     @GetMapping("{eventId}")
     public EventResource getEventById(@PathVariable Long eventId){
         return mapper.toResource(eventService.getById(eventId));
     }
 
 
+    @Operation(summary = "Post a event")
     @PostMapping("{organizerId}")
     public ResponseEntity<EventResource> createEvent(@RequestBody CreateEventResource resource, @PathVariable Long organizerId){
         return new ResponseEntity<>(mapper.toResource(eventService.create(mapper.toModel(resource), organizerId)), HttpStatus.CREATED);
     }
 
-    //@PostMapping()
-
+    @Operation(summary = "Edit a event")
     @PutMapping("{eventId}")
     public EventResource updateEvent(@PathVariable Long eventId,
                                      @RequestBody UpdateEventResource resource){
         return mapper.toResource(eventService.update(eventId, mapper.toModel(resource)));
     }
 
+    @Operation(summary = "Get all users of a organizer")
     @GetMapping("/organizer/{organizerId}") // New endpoint
     public ResponseEntity<Page<EventResource>> getEventsByOrganizerId(@PathVariable Long organizerId, Pageable pageable) {
         List<Event> events = eventService.getAllByOrganizerId(organizerId);
         return new ResponseEntity<>(mapper.modelListPage(events, pageable), HttpStatus.OK);
     }
 
-
+    @Operation(summary = "Get a event")
     @DeleteMapping("{eventId}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long eventId){ return eventService.delete(eventId);}
 
+    @Operation(summary = "Post image of a event")
     @PostMapping("{eventId}/upload")
     public ResponseEntity<Event> uploadFiles(@PathVariable Long eventId, @RequestParam("file") MultipartFile file) throws IOException {
 
         Event post = eventService.getById(eventId);
-
         if (post == null) return ResponseEntity.notFound().build();
-
-        String path = storageService.storage(file);
-        String host = request.getRequestURL().toString().replace(request.getRequestURI(), "");
-        String url = ServletUriComponentsBuilder
-                    .fromHttpUrl(host)
-                    .path("/api/v1/events/")
-                    .path(path)
-                    .toUriString();
-
         String stringUrl = myFileService.uploadFile(file, "event" +eventId+ "image" + file.getOriginalFilename(), "the-big-fun-files");
         post.setImageUrl(stringUrl);
         Event postWithImages= eventService.update(eventId, post);
-
         return ResponseEntity.ok(postWithImages);
     }
-
-    /*
-    @GetMapping("{filename:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
-        Resource file = storageService.loadAsResource(filename);
-        String contentType = Files.probeContentType(file.getFile().toPath());
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_TYPE, contentType)
-                .body(file);
-    }*/
 
 
 

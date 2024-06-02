@@ -45,7 +45,7 @@ public class OrganizerServiceImpl implements OrganizerService {
 
     @Override
     public Organizer getByName(String mame) {
-        var organizerWithName = organizerRepository.findFirstByName(mame);
+        var organizerWithName = organizerRepository.findFirstByUserName(mame);
         if(organizerWithName==null)
             throw new ResourceValidationException(ENTITY,"The organizer doesn't exist.");
         return organizerWithName;
