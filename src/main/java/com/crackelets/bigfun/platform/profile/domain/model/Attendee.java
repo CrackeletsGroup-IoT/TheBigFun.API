@@ -5,6 +5,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
 import lombok.*;
 
 import java.util.HashSet;
@@ -40,12 +42,8 @@ public class Attendee {
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "attendee")
-    private Set<AttendeeEvent>eventsListByAttendee;
+    private Set<EventAttendee> eventAttendees;
 
-    public void addEvent(Attendee attendee,Long eventId){
-        if(eventsListByAttendee==null) eventsListByAttendee=new HashSet<>();
-        this.eventsListByAttendee.add(new AttendeeEvent(this,eventId));
-    }
 
 
 }

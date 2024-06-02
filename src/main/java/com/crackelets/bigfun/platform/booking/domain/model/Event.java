@@ -59,6 +59,6 @@ public class Event extends AuditModel {
     private Organizer organizer;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
-    private Set<EventAttendee> attendeesListByEvent;
+    private Set<EventAttendee> eventAttendees;
 
 }
