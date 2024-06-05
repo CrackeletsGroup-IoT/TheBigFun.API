@@ -16,5 +16,4 @@ public class EventAttendeeResource {
     private EventResource event;
     private AttendeeResource attendee;
     private IoTDevice ioTDevice;
-    private PaymentResource payment;
 }
