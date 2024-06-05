@@ -1,12 +1,10 @@
 package com.crackelets.bigfun.platform.management;
 
 import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
-import jdk.javadoc.doclet.Taglet;
 import lombok.*;
-import lombok.extern.java.Log;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
+
 
 @Getter
 @Setter
@@ -21,10 +19,19 @@ public class IoTDevice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    private double distanceP1;
 
-    private Integer pulse;
+    private double distanceP2;
+
+    private double distanceBetween;
+
+    private double pulse;
+
+    private boolean safe;
+
+    private boolean danger;
+
+    private String time;
 
     @OneToOne
     @JoinColumn(name = "event_attendee_id")
