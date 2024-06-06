@@ -61,5 +61,11 @@ public class EventAttendeeController {
         return new ResponseEntity<>(mapper.toResource(eventAttendeeService.create(eventId, attendeeId)), HttpStatus.CREATED);
     }
 
+    //GetByEventAttendeId
+    @GetMapping("/{id}")
+    public ResponseEntity<EventAttendeeResource> getEventAttendeeById(@PathVariable Long id){
+        return new ResponseEntity<>(mapper.toResource(eventAttendeeService.getEventAttendeeById(id)), HttpStatus.OK);
+    }
+
 
 }
