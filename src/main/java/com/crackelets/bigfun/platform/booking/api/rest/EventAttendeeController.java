@@ -5,10 +5,10 @@ import com.crackelets.bigfun.platform.booking.domain.persistence.EventRepository
 import com.crackelets.bigfun.platform.booking.domain.service.EventAttendeeService;
 import com.crackelets.bigfun.platform.booking.mapping.EventAttendeeMapper;
 import com.crackelets.bigfun.platform.booking.mapping.EventMapper;
+import com.crackelets.bigfun.platform.booking.resource.AttendeeByEventResource;
 import com.crackelets.bigfun.platform.booking.resource.EventAttendeeResource;
 import com.crackelets.bigfun.platform.booking.resource.EventResource;
 import com.crackelets.bigfun.platform.profile.mapping.AttendeeMapper;
-import com.crackelets.bigfun.platform.profile.resource.AttendeeResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -31,13 +31,16 @@ public class EventAttendeeController {
 
     private final EventMapper eventMapper;
 
-    public EventAttendeeController(EventAttendeeService eventAttendeeService, EventRepository eventRepository, EventAttendeeRepository eventAttendeeRepository, EventAttendeeMapper mapper, AttendeeMapper attendeeMapper, EventMapper eventMapper) {
+    private final EventAttendeeMapper eventAttendeeMapper;
+
+    public EventAttendeeController(EventAttendeeService eventAttendeeService, EventRepository eventRepository, EventAttendeeRepository eventAttendeeRepository, EventAttendeeMapper mapper, AttendeeMapper attendeeMapper, EventMapper eventMapper, EventAttendeeMapper eventAttendeeMapper) {
         this.eventAttendeeService = eventAttendeeService;
         this.eventRepository = eventRepository;
         this.eventAttendeeRepository = eventAttendeeRepository;
         this.mapper = mapper;
         this.attendeeMapper = attendeeMapper;
         this.eventMapper = eventMapper;
+        this.eventAttendeeMapper = eventAttendeeMapper;
     }
 
 
@@ -52,8 +55,8 @@ public class EventAttendeeController {
     }
 
     @GetMapping("events/{eventId}")
-    public Page<AttendeeResource> getAllAttendeesByEvent(@PathVariable Long eventId, Pageable pageable){
-        return attendeeMapper.modelListPage(eventAttendeeService.getAllAttendeesByEventId(eventId),pageable);
+    public Page<AttendeeByEventResource> getAllAttendeesByEvent(@PathVariable Long eventId, Pageable pageable){
+        return eventAttendeeMapper.toAttendeeByEventResource(eventAttendeeService.getAllAttendeesByEventId(eventId),pageable);
     }
 
     @PostMapping("event-{eventId}/attendee-{attendeeId}")
