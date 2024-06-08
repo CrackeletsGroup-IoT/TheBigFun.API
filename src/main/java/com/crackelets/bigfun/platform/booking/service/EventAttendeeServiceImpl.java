@@ -5,6 +5,8 @@ import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
 import com.crackelets.bigfun.platform.booking.domain.persistence.EventAttendeeRepository;
 import com.crackelets.bigfun.platform.booking.domain.persistence.EventRepository;
 import com.crackelets.bigfun.platform.booking.domain.service.EventAttendeeService;
+import com.crackelets.bigfun.platform.management.IoTDevice;
+import com.crackelets.bigfun.platform.management.IotDeviceRepository;
 import com.crackelets.bigfun.platform.profile.domain.model.Attendee;
 import com.crackelets.bigfun.platform.profile.domain.persistence.AttendeeRepository;
 import com.crackelets.bigfun.platform.shared.exception.ResourceNotFoundException;
@@ -23,16 +25,40 @@ public class EventAttendeeServiceImpl implements EventAttendeeService {
 
     private final EventRepository eventRepository;
     private final AttendeeRepository attendeeRepository;
+    private final IotDeviceRepository iotDeviceRepository;
 
     private final Validator validator;
 
-    public EventAttendeeServiceImpl(EventAttendeeRepository eventAttendeeRepository, EventRepository eventRepository, AttendeeRepository attendeeRepository, Validator validator) {
+    public EventAttendeeServiceImpl(EventAttendeeRepository eventAttendeeRepository, EventRepository eventRepository, AttendeeRepository attendeeRepository, Validator validator, IotDeviceRepository iotDeviceRepository) {
         this.eventAttendeeRepository = eventAttendeeRepository;
         this.eventRepository = eventRepository;
         this.attendeeRepository = attendeeRepository;
         this.validator = validator;
+        this.iotDeviceRepository = iotDeviceRepository;
     }
 
+    @Override
+    public EventAttendee addIoTDevice(Long eventAttendeeId, Long ioTDeviceId) {
+        Optional<EventAttendee> eventAttendee = eventAttendeeRepository.findEventAttendeeById(eventAttendeeId);
+        if (!eventAttendee.isPresent()){
+            throw new RuntimeException("EventAttendee not found with id " + eventAttendeeId);
+        }
+        Optional<IoTDevice> iotDevice = iotDeviceRepository.findById(ioTDeviceId);
+        if (!iotDevice.isPresent()){
+            throw new RuntimeException("IoTDevice not found with id " + ioTDeviceId);
+        }
+        Optional<EventAttendee> eventAttendeeWithIoTDevice = eventAttendeeRepository.findEventAttendeeByIoTDevice_Id(ioTDeviceId);
+        if (eventAttendeeWithIoTDevice.isPresent()){
+            throw new RuntimeException("IoTDevice already assigned to an EventAttendee");
+        }
+
+        return eventAttendeeRepository.findEventAttendeeById(eventAttendeeId).map(EventToUpdate ->
+                eventAttendeeRepository.save(
+                        EventToUpdate.withIoTDevice(iotDevice.get())
+                )
+                ).orElseThrow(() -> new ResourceNotFoundException("EventAttendee", eventAttendeeId));
+
+    }
 
     @Override
     public List<EventAttendee> getAll() {
@@ -63,7 +89,6 @@ public class EventAttendeeServiceImpl implements EventAttendeeService {
         Attendee attendee = optionalAttendee.get();
         eventAttendee.setAttendee(attendee);
         return eventAttendeeRepository.save(eventAttendee);
-
     }
 
     @Override

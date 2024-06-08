@@ -16,5 +16,4 @@ public class IoTDeviceResource {
     private boolean safe;
     private boolean danger;
     private String time;
-    private Long eventAttendeeId;
 }

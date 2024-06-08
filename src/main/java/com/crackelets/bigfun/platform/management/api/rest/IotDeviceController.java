@@ -46,9 +46,9 @@ public class IotDeviceController {
     }
 
     @PostMapping
-    public ResponseEntity<IoTDevice> createIoTDevice(@RequestBody IoTDevice iotDevice) {
-        IoTDevice createdIoTDevice = ioTDeviceService.createIoTDevice(iotDevice);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdIoTDevice);
+    public ResponseEntity<IoTDeviceResource> createIoTDevice(@RequestBody IoTDeviceResource iotDevice) {
+        IoTDevice createdIoTDevice = ioTDeviceService.createIoTDevice(ioTDeviceMapper.toModel(iotDevice));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ioTDeviceMapper.toResource(createdIoTDevice));
     }
 
     @PatchMapping("/{id}")

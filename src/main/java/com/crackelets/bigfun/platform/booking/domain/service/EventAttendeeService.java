@@ -21,4 +21,5 @@ public interface EventAttendeeService {
 
     List<Attendee> getAllAttendeesByEventId(Long eventId);
 
+    EventAttendee addIoTDevice(Long eventAttendeeId, Long ioTDeviceId);
 }
