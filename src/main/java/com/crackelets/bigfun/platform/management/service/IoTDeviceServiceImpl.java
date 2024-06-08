@@ -43,40 +43,26 @@ public class IoTDeviceServiceImpl implements IoTDeviceService{
     }
 
     @Override
-    public IoTDevice updateIoTDevice(Long id, Map<String, Object> updates) {
+    public IoTDevice updateIoTDeviceDistance(Long id, IoTDevice ioTDevice) {
         IoTDevice existingIoTDevice = ioTDeviceRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("IoTDevice", id));
-
-        updates.forEach((key, value) -> {
-            switch (key) {
-                case "distanceP1":
-                    existingIoTDevice.setDistanceP1((Double) value);
-                    break;
-                case "distanceP2":
-                    existingIoTDevice.setDistanceP2((Double) value);
-                    break;
-                case "distanceBetween":
-                    existingIoTDevice.setDistanceBetween((Double) value);
-                    break;
-                case "pulse":
-                    existingIoTDevice.setPulse((Double) value);
-                    break;
-                case "safe":
-                    existingIoTDevice.setSafe((Boolean) value);
-                    break;
-                case "danger":
-                    existingIoTDevice.setDanger((Boolean) value);
-                    break;
-                case "time":
-                    existingIoTDevice.setTime((String) value);
-                    break;
-                case "eventAttendee":
-                    existingIoTDevice.setEventAttendee((EventAttendee) value);
-                    break;
-
-            }
-        });
-
+        existingIoTDevice.setDistanceP1(ioTDevice.getDistanceP1());
+        existingIoTDevice.setDistanceP2(ioTDevice.getDistanceP2());
+        existingIoTDevice.setDistanceBetween(ioTDevice.getDistanceBetween());
         return ioTDeviceRepository.save(existingIoTDevice);
+
     }
+
+    @Override
+    public IoTDevice updateIoTDevicePulse(Long id, IoTDevice ioTDevice) {
+        IoTDevice existingIoTDevice = ioTDeviceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("IoTDevice", id));
+        existingIoTDevice.setPulse(ioTDevice.getPulse());
+        existingIoTDevice.setSafe(ioTDevice.isSafe());
+        existingIoTDevice.setDanger(ioTDevice.isDanger());
+        return ioTDeviceRepository.save(existingIoTDevice);
+
+    }
+
+
 }
