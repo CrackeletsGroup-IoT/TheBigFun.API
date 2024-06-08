@@ -10,4 +10,14 @@ public class MappingConfiguration {
     public IotDeviceMapper iotDeviceMapper() {
         return new IotDeviceMapper();
     }
+
+    @Bean
+    public IoTDeviceDistanceMapper ioTDeviceDistanceMapper(){
+        return new IoTDeviceDistanceMapper();
+    }
+
+    @Bean
+    public IoTDevicePulseMapper ioTDevicePulseMapper(){
+        return new IoTDevicePulseMapper();
+    }
 }

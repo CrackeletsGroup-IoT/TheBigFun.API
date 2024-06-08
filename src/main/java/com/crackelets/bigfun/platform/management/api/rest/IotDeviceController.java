@@ -1,8 +1,12 @@
 package com.crackelets.bigfun.platform.management.api.rest;
 
 import com.crackelets.bigfun.platform.management.IoTDevice;
+import com.crackelets.bigfun.platform.management.mapping.IoTDeviceDistanceMapper;
+import com.crackelets.bigfun.platform.management.mapping.IoTDevicePulseMapper;
 import com.crackelets.bigfun.platform.management.mapping.IotDeviceMapper;
 import com.crackelets.bigfun.platform.management.resource.IoTDeviceResource;
+import com.crackelets.bigfun.platform.management.resource.IoTDeviceResourceDistance;
+import com.crackelets.bigfun.platform.management.resource.IoTDeviceResourcePulse;
 import com.crackelets.bigfun.platform.management.service.IoTDeviceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +22,14 @@ public class IotDeviceController {
 
     private final IoTDeviceService ioTDeviceService;
     private final IotDeviceMapper ioTDeviceMapper;
+    private final IoTDeviceDistanceMapper ioTDeviceDistanceMapper;
+    private final IoTDevicePulseMapper ioTDevicePulseMapper;
 
-    public IotDeviceController(IoTDeviceService ioTDeviceService, IotDeviceMapper ioTDeviceMapper) {
+    public IotDeviceController(IoTDeviceService ioTDeviceService, IotDeviceMapper ioTDeviceMapper, IoTDeviceDistanceMapper ioTDeviceDistanceMapper, IoTDevicePulseMapper ioTDevicePulseMapper) {
         this.ioTDeviceService = ioTDeviceService;
         this.ioTDeviceMapper = ioTDeviceMapper;
+        this.ioTDeviceDistanceMapper = ioTDeviceDistanceMapper;
+        this.ioTDevicePulseMapper = ioTDevicePulseMapper;
     }
 
 
@@ -51,11 +59,24 @@ public class IotDeviceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ioTDeviceMapper.toResource(createdIoTDevice));
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<IoTDevice> updateIoTDevice(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        IoTDevice updatedIoTDevice = ioTDeviceService.updateIoTDevice(id, updates);
-        return ResponseEntity.ok(updatedIoTDevice);
+    //UpdateIotDeviceDistance
+    @PutMapping("/distance/{id}")
+    public ResponseEntity<IoTDeviceResourceDistance> updateIoTDeviceDistance(@PathVariable Long id, @RequestBody IoTDeviceResourceDistance iotDevice) {
+        IoTDevice updatedIoTDevice = ioTDeviceService.updateIoTDeviceDistance(id, ioTDeviceDistanceMapper.toModel(iotDevice));
+        return ResponseEntity.ok(ioTDeviceDistanceMapper.toResource(updatedIoTDevice));
     }
+
+
+
+    //UpdateIotDevicePulse
+    @PutMapping("/pulse/{id}")
+    public ResponseEntity<IoTDeviceResourcePulse> updateIoTDevicePulse(@PathVariable Long id, @RequestBody IoTDeviceResourcePulse iotDevice) {
+        IoTDevice updatedIoTDevice = ioTDeviceService.updateIoTDevicePulse(id, ioTDevicePulseMapper.toModel(iotDevice));
+        return ResponseEntity.ok(ioTDevicePulseMapper.toResource(updatedIoTDevice));
+    }
+
+
+
 
 
 

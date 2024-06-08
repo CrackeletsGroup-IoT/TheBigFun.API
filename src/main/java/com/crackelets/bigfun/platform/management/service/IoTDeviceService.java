@@ -10,8 +10,10 @@ public interface IoTDeviceService {
 
     IoTDevice createIoTDevice(IoTDevice ioTDevice);
 
-    IoTDevice updateIoTDevice(Long id, Map<String, Object> updates);
 
+    IoTDevice updateIoTDeviceDistance(Long id, IoTDevice ioTDevice);
+
+    IoTDevice updateIoTDevicePulse(Long id, IoTDevice ioTDevice);
 
     List<IoTDevice> getAllIoTDevices();
 
