@@ -70,5 +70,9 @@ public class EventAttendeeController {
         return new ResponseEntity<>(mapper.toResource(eventAttendeeService.getEventAttendeeById(id)), HttpStatus.OK);
     }
 
+    @PutMapping("/{eventAttendeeId}/iot-device/{ioTDeviceId}")
+    public ResponseEntity<EventAttendeeResource> addIoTDevice(@PathVariable Long eventAttendeeId, @PathVariable Long ioTDeviceId){
+        return new ResponseEntity<>(mapper.toResource(eventAttendeeService.addIoTDevice(eventAttendeeId, ioTDeviceId)), HttpStatus.CREATED);
+    }
 
 }
