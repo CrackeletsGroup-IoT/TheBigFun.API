@@ -1,5 +1,7 @@
 package com.crackelets.bigfun.platform.management.resource;
 
+import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
+import com.crackelets.bigfun.platform.booking.resource.EventAttendeeResource;
 import lombok.*;
 
 @Getter

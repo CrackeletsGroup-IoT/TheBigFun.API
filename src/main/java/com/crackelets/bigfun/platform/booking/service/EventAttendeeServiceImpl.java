@@ -52,13 +52,34 @@ public class EventAttendeeServiceImpl implements EventAttendeeService {
             throw new RuntimeException("IoTDevice already assigned to an EventAttendee");
         }
 
-        return eventAttendeeRepository.findEventAttendeeById(eventAttendeeId).map(EventToUpdate ->
-                eventAttendeeRepository.save(
-                        EventToUpdate.withIoTDevice(iotDevice.get())
-                )
-                ).orElseThrow(() -> new ResourceNotFoundException("EventAttendee", eventAttendeeId));
+        EventAttendee eventAttendeeToSave = eventAttendee.get();
+        eventAttendeeToSave.setIoTDevice(iotDevice.get());
+        IoTDevice ioTDeviceToSave = iotDevice.get();
+        ioTDeviceToSave.setEventAttendee(eventAttendeeToSave);
+        iotDeviceRepository.save(ioTDeviceToSave);
+        return eventAttendeeRepository.save(eventAttendeeToSave);
 
     }
+
+    @Override
+    public EventAttendee deleteIoTDevice(Long eventAttendeeId) {
+        Optional<EventAttendee> eventAttendee = eventAttendeeRepository.findEventAttendeeById(eventAttendeeId);
+        if (!eventAttendee.isPresent()){
+            throw new RuntimeException("EventAttendee not found with id " + eventAttendeeId);
+        }
+        Optional<IoTDevice> iotDevice = iotDeviceRepository.findByEventAttendeeId(eventAttendeeId);
+        if (eventAttendee.get().getIoTDevice() == null && iotDevice.isPresent()){
+            throw new RuntimeException("EventAttendee does not have an IoTDevice");
+        }
+        EventAttendee eventAttendeeWithIoTDeviceToDelete = eventAttendee.get();
+        IoTDevice ioTDeviceToDelete = eventAttendeeWithIoTDeviceToDelete.getIoTDevice();
+        ioTDeviceToDelete.setEventAttendee(null);
+        eventAttendeeWithIoTDeviceToDelete.setIoTDevice(null);
+        iotDeviceRepository.save(ioTDeviceToDelete);
+        return eventAttendeeRepository.save(eventAttendeeWithIoTDeviceToDelete);
+    }
+
+
 
     @Override
     public List<EventAttendee> getAll() {

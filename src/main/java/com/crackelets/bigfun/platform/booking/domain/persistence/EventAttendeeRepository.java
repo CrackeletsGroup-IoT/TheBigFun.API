@@ -20,4 +20,5 @@ public interface EventAttendeeRepository extends JpaRepository<EventAttendee, Lo
     Optional<EventAttendee> findEventAttendeeByPayment_Id(Long paymentId);
 
     Optional<EventAttendee> findEventAttendeeByIoTDevice_Id(Long ioTDeviceId);
+
 }

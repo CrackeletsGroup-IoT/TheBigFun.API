@@ -9,6 +9,7 @@ import com.crackelets.bigfun.platform.booking.resource.AttendeeByEventResource;
 import com.crackelets.bigfun.platform.booking.resource.EventAttendeeResource;
 import com.crackelets.bigfun.platform.booking.resource.EventResource;
 import com.crackelets.bigfun.platform.profile.mapping.AttendeeMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -70,9 +71,19 @@ public class EventAttendeeController {
         return new ResponseEntity<>(mapper.toResource(eventAttendeeService.getEventAttendeeById(id)), HttpStatus.OK);
     }
 
+    @Operation(summary = "Update an IoT Device from Event-Attendee")
     @PutMapping("/{eventAttendeeId}/iot-device/{ioTDeviceId}")
     public ResponseEntity<EventAttendeeResource> addIoTDevice(@PathVariable Long eventAttendeeId, @PathVariable Long ioTDeviceId){
         return new ResponseEntity<>(mapper.toResource(eventAttendeeService.addIoTDevice(eventAttendeeId, ioTDeviceId)), HttpStatus.CREATED);
     }
+
+    @Operation(summary = "Delete IoT Device from Event-Attendee")
+    @DeleteMapping("/{eventAttendeeId}/iot-device")
+    public ResponseEntity<EventAttendeeResource> deleteIoTDevice(@PathVariable Long eventAttendeeId){
+        return new ResponseEntity<>(mapper.toResource(eventAttendeeService.deleteIoTDevice(eventAttendeeId)), HttpStatus.OK);
+    }
+
+
+
 
 }
