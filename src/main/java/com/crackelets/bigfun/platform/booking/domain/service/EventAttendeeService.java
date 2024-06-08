@@ -19,7 +19,7 @@ public interface EventAttendeeService {
 
     List<Event> getAllByAttendeeId(Long attendeeId);
 
-    List<Attendee> getAllAttendeesByEventId(Long eventId);
+    List<EventAttendee> getAllAttendeesByEventId(Long eventId);
 
     EventAttendee addIoTDevice(Long eventAttendeeId, Long ioTDeviceId);
 
