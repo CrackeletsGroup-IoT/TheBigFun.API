@@ -56,8 +56,8 @@ public class EventAttendeeController {
     }
 
     @GetMapping("events/{eventId}")
-    public Page<AttendeeByEventResource> getAllAttendeesByEvent(@PathVariable Long eventId, Pageable pageable){
-        return eventAttendeeMapper.toAttendeeByEventResource(eventAttendeeService.getAllAttendeesByEventId(eventId),pageable);
+    public Page<EventAttendeeResource> getAllAttendeesByEvent(@PathVariable Long eventId, Pageable pageable){
+        return eventAttendeeMapper.modelListPage(eventAttendeeService.getAllAttendeesByEventId(eventId),pageable);
     }
 
     @PostMapping("event-{eventId}/attendee-{attendeeId}")

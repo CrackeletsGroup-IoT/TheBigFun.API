@@ -126,9 +126,7 @@ public class EventAttendeeServiceImpl implements EventAttendeeService {
     }
 
     @Override
-    public List<Attendee> getAllAttendeesByEventId(Long eventId) {
-        return eventAttendeeRepository.findAllByEvent_Id(eventId).stream()
-                .map(EventAttendee::getAttendee)
-                .collect(Collectors.toList());
+    public List<EventAttendee> getAllAttendeesByEventId(Long eventId) {
+        return eventAttendeeRepository.findAllByEvent_Id(eventId);
     }
 }
