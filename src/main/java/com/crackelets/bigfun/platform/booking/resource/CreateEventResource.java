@@ -28,10 +28,6 @@ public class CreateEventResource {
 
     @NotNull
     private int capacity;
-
-    @Size(max = 500)
-    private String image;
-
     @NotNull
     private String date;
 
@@ -42,11 +38,6 @@ public class CreateEventResource {
     @Size(max = 50)
     @NotNull
     private String district;
-
-/*    @NotNull
-    private Long organizerId;*/
-
-
 
 
 }

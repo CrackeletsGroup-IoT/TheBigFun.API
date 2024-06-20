@@ -1,8 +1,9 @@
 package com.crackelets.bigfun.platform.booking.mapping;
 
 import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
-import com.crackelets.bigfun.platform.booking.resource.CreateEventAttendeeResource;
+import com.crackelets.bigfun.platform.booking.resource.AttendeeByEventResource;
 import com.crackelets.bigfun.platform.booking.resource.EventAttendeeResource;
+import com.crackelets.bigfun.platform.profile.domain.model.Attendee;
 import com.crackelets.bigfun.platform.shared.mapping.EnhancedModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,9 +24,8 @@ public class EventAttendeeMapper implements Serializable {
     public Page<EventAttendeeResource> modelListPage(List<EventAttendee> modelList, Pageable pageable){
         return new PageImpl<>(mapper.mapList(modelList,EventAttendeeResource.class),pageable,modelList.size());
     }
-
-    public EventAttendee toModel(CreateEventAttendeeResource resource){ return mapper.map(resource,EventAttendee.class);}
-
-    //public EventAttendee toModel(UpdateAttendeeResource resource){ return mapper.map(resource,EventAttendee.class);}
+    public Page<AttendeeByEventResource> toAttendeeByEventResource(List<Attendee> modelList, Pageable pageable){
+        return new PageImpl<>(mapper.mapList(modelList,AttendeeByEventResource.class),pageable,modelList.size());
+    }
 
 }

@@ -15,7 +15,7 @@ public class OpenApiConfiguration {
             String applicationVersion) {
         return new OpenAPI()
                 .info(new Info()
-                        .title("ACME Learning Center API")
+                        .title("The Big Fun API")
                         .version(applicationVersion)
                         .description(applicationDescription));
     }

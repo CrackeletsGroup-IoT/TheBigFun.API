@@ -1,5 +1,6 @@
 package com.crackelets.bigfun.platform.booking.domain.model;
 
+import com.crackelets.bigfun.platform.profile.domain.model.Organizer;
 import com.crackelets.bigfun.platform.shared.domain.model.AuditModel;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,8 +38,11 @@ public class Event extends AuditModel {
     @NotNull
     private int capacity;
 
-    @Size(max = 500)
-    private String image;
+    //@ElementCollection
+    //@CollectionTable(name = "event_images", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "image_url")
+    private String imageUrl;
+
 
     @NotNull
     private String date;
@@ -48,33 +53,12 @@ public class Event extends AuditModel {
     @Size(max = 50)
     @NotNull
     private String district;
-/*    @NotNull
-    private Long organizerId;*/
 
-
-
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
-    private Set<EventAttendee> attendeesListByEvent;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "organizer_id")
+    private Organizer organizer;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "event")
-    private Set<EventPayment> payments;
-
-    public Event addAttendee(Event event,Long attendeeId){
-
-        if(attendeesListByEvent ==null) attendeesListByEvent = new HashSet<>();
-
-        this.attendeesListByEvent.add(new EventAttendee(this, attendeeId));
-
-        return this;
-    }
-
-    public Event addPayment(Event event,Long paymentId){
-
-        if(payments ==null) payments = new HashSet<>();
-
-        this.payments.add(new EventPayment(this, paymentId));
-
-        return this;
-    }
+    private Set<EventAttendee> eventAttendees;
 
 }

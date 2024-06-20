@@ -45,7 +45,7 @@ public class OrganizerServiceImpl implements OrganizerService {
 
     @Override
     public Organizer getByName(String mame) {
-        var organizerWithName = organizerRepository.findFirstByName(mame);
+        var organizerWithName = organizerRepository.findFirstByUserName(mame);
         if(organizerWithName==null)
             throw new ResourceValidationException(ENTITY,"The organizer doesn't exist.");
         return organizerWithName;
@@ -115,23 +115,4 @@ public class OrganizerServiceImpl implements OrganizerService {
                     return ResponseEntity.ok().build();})
                 .orElseThrow(()->new ResourceNotFoundException(ENTITY,organizerId));
     }
-
-    @Override
-    public Organizer addEventToOrganizer(Long organizerId, String eventName) {
-        /*
-
-        return organizerRepository.findById(organizerId).map(organizer->{
-                    return organizerRepository.save(organizer.addEvent(eventName));
-                })
-                .orElseThrow(()->new ResourceNotFoundException(ENTITY,organizerId));*/
-        return null;
-
-    }
-
-    @Override
-    public Organizer addPayToOrganizer(Long organizerId, Long paymentId) {
-
-         return null;
-    }
-
 }

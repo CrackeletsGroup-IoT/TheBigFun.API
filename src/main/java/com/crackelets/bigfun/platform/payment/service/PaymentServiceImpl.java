@@ -1,5 +1,7 @@
 package com.crackelets.bigfun.platform.payment.service;
 
+import com.crackelets.bigfun.platform.booking.domain.model.EventAttendee;
+import com.crackelets.bigfun.platform.booking.domain.persistence.EventAttendeeRepository;
 import com.crackelets.bigfun.platform.payment.domain.model.Payment;
 import com.crackelets.bigfun.platform.payment.domain.persistence.PaymentRepository;
 import com.crackelets.bigfun.platform.payment.domain.service.PaymentService;
@@ -14,16 +16,19 @@ import org.springframework.stereotype.Service;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
     private static final String ENTITY = "Payment";
     private final PaymentRepository paymentRepository;
+    private final EventAttendeeRepository eventAttendeeRepository;
     private final Validator validator;
 
-    public PaymentServiceImpl(PaymentRepository paymentRepository, Validator validator) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository, EventAttendeeRepository eventAttendeeRepository, Validator validator) {
         this.paymentRepository = paymentRepository;
+        this.eventAttendeeRepository = eventAttendeeRepository;
         this.validator = validator;
     }
 
@@ -44,20 +49,40 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment create(Payment payment) {
+    public Payment create(Payment payment, Long eventAttendeeId) {
         Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
 
         if(!violations.isEmpty())
             throw new ResourceValidationException(ENTITY, violations);
-        Payment paymentWithDate = paymentRepository.findByDate(payment.getDate());
 
+        Optional<EventAttendee> eventAttendeeOptional = eventAttendeeRepository.findEventAttendeeById(eventAttendeeId);
 
-        return paymentRepository.save(payment);
+        if (eventAttendeeOptional.isPresent()){
+            EventAttendee eventAttendee = eventAttendeeOptional.get();
+
+            // Guardar Payment primero
+            Payment savedPayment = paymentRepository.save(payment);
+            eventAttendee.setPayment(savedPayment);
+            eventAttendeeRepository.save(eventAttendee);
+
+            return savedPayment;
+
+        }
+
+        throw new RuntimeException("EventAttendee with id" + eventAttendeeId + " not found");
+
     }
 
     @Override
     public Payment update(Long id, Payment payment) {
-        return null;
+        Set<ConstraintViolation<Payment>> violations = validator.validate(payment);
+
+        if (!violations.isEmpty())
+            throw  new ResourceValidationException(ENTITY, violations);
+
+        return paymentRepository.findById(id).map(paymentToUpdate -> paymentRepository.save(
+            paymentToUpdate.withDate(payment.getDate()).withQrImg(payment.getQrImg())))
+          .orElseThrow(() -> new ResourceNotFoundException(ENTITY, id));
     }
 
     @Override
@@ -66,5 +91,11 @@ public class PaymentServiceImpl implements PaymentService {
             paymentRepository.delete(payment);
             return ResponseEntity.ok().build();})
                 .orElseThrow(()->new ResourceNotFoundException(ENTITY,paymentId));
+    }
+
+    @Override
+    public Payment getByUuid(String uuid) {
+        return paymentRepository.findByUuid(uuid)
+                .orElseThrow(()-> new ResourceNotFoundException(ENTITY));
     }
 }
