@@ -21,5 +21,6 @@ public class UpdateEventResource {
     private Time hour;
     private int cost;
     private String district;
+    private String description;
 
 }

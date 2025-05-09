@@ -106,6 +106,7 @@ public class EventAttendeeServiceImpl implements EventAttendeeService {
         }
 
         Event event = optionalEvent.get();
+        event.setCapacity(event.getCapacity() -1);
         eventAttendee.setEvent(event);
         Attendee attendee = optionalAttendee.get();
         eventAttendee.setAttendee(attendee);

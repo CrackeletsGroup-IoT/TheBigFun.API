@@ -48,11 +48,16 @@ public class Event extends AuditModel {
     private String date;
 
     @NotNull
+    private String hour;
+
+    @NotNull
     private int cost;
 
     @Size(max = 50)
     @NotNull
     private String district;
+
+    private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organizer_id")
