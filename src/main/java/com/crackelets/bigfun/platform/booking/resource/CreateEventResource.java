@@ -31,6 +31,11 @@ public class CreateEventResource {
     @NotNull
     private String date;
 
+    @NotNull
+    private String hour;
+
+    @NotNull
+    private String description;
 
     @NotNull
     private int cost;

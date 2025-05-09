@@ -21,5 +21,7 @@ public class EventResource {
     private String imageUrl;
     private int cost;
     private String district;
+    private String hour;
+    private String description;
 
 }
