@@ -1,6 +1,7 @@
 package com.crackelets.bigfun.platform.payment.api.rest;
 
 import com.crackelets.bigfun.platform.booking.domain.model.Event;
+import com.crackelets.bigfun.platform.booking.domain.persistence.EventAttendeeRepository;
 import com.crackelets.bigfun.platform.booking.resource.CreateEventResource;
 import com.crackelets.bigfun.platform.booking.resource.EventResource;
 import com.crackelets.bigfun.platform.payment.domain.model.Payment;
@@ -9,6 +10,7 @@ import com.crackelets.bigfun.platform.payment.mapping.PaymentMapper;
 import com.crackelets.bigfun.platform.payment.resource.CreatePaymentResource;
 import com.crackelets.bigfun.platform.payment.resource.PaymentResource;
 import com.crackelets.bigfun.platform.payment.resource.QRCodeRequest;
+import com.crackelets.bigfun.platform.payment.service.PaymentServiceImpl;
 import com.crackelets.bigfun.platform.storage.service.MyFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,13 +31,14 @@ import java.util.Map;
 public class PaymentController {
 private final PaymentService paymentService;
 private final PaymentMapper mapper;
-    private final MyFileService myFileService;
+private final MyFileService myFileService;
+private final EventAttendeeRepository eventAttendeeRepository;
 
-
-    public PaymentController(PaymentService paymentService, PaymentMapper mapper, MyFileService myFileService) {
+    public PaymentController(PaymentService paymentService, PaymentMapper mapper, MyFileService myFileService, EventAttendeeRepository eventAttendeeRepository) {
         this.paymentService = paymentService;
         this.mapper = mapper;
       this.myFileService = myFileService;
+        this.eventAttendeeRepository = eventAttendeeRepository;
     }
 
     @Operation(summary = "Get all payments")
@@ -100,20 +103,45 @@ private final PaymentMapper mapper;
         return paymentService.delete(paymentId);
     }
 
+
+/*
     @Operation(summary = "Post QR of a payment")
     @PostMapping("{paymentId}/upload")
     public ResponseEntity<PaymentResource> uploadFiles(@PathVariable Long paymentId, @RequestParam("file") MultipartFile file) throws IOException {
 
         Payment payment = paymentService.getById(paymentId);
-
         if (payment == null) return ResponseEntity.notFound().build();
 
         String stringUrl = myFileService.uploadFile(file, "payment"+ paymentId + "qr.png", "the-big-fun-qr");
         payment.setQrImg(stringUrl);
+
+
         Payment postWithImages= paymentService.update(paymentId, payment);
+
+
+
 
         return ResponseEntity.ok(mapper.toResource(postWithImages));
     }
+*/
+
+    @Operation(summary = "Post QR of a payment")
+    @PostMapping("{paymentId}/upload")
+    public ResponseEntity<PaymentResource> uploadFiles(@PathVariable Long paymentId, @RequestParam("file") MultipartFile file) throws IOException {
+
+
+        Payment payment = paymentService.getById(paymentId);
+        if (payment == null) return ResponseEntity.notFound().build();
+        String stringUrl = myFileService.uploadFile(file, "payment" + paymentId + "qr.png", "the-big-fun-qr");
+        payment.setQrImg(stringUrl);
+        Payment updatedPayment = paymentService.update(paymentId, payment);
+        eventAttendeeRepository.findEventAttendeeByPayment_Id(paymentId).ifPresent(eventAttendee -> {
+            ((PaymentServiceImpl)paymentService).notifyN8nAfterPayment(updatedPayment, eventAttendee);
+        });
+
+        return ResponseEntity.ok(mapper.toResource(updatedPayment));
+    }
+
 
     @Operation(summary = "Get payment by uuid")
     @GetMapping("/uuid/{uuid}")
