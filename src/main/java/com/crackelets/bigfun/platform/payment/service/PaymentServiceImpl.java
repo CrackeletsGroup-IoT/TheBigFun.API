@@ -116,7 +116,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     // notification for my n8n
     public void notifyN8nAfterPayment(Payment payment, EventAttendee eventAttendee) {
-        String n8nWebhookUrl = "http://localhost:5678/webhook/payment-confirmation";
+        String n8nWebhookUrl = "https://dhv3s6pv-5678.brs.devtunnels.ms/webhook/payment-confirmation";
         RestTemplate restTemplate = new RestTemplate();
 
 
